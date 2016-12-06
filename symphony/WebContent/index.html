@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.9/angular.min.js"></script>
+	<script language="JavaScript" src="products.js"></script>
+	<body>
+		<div ng-app="symphony" ng-controller="productCtrl">
+			<div ng-show="status>=400">
+				{{messages}}, {{status}}
+			</div>
+			<div class="rule" align="center" ng-show="status<400">
+				<div class="sorting">
+					<select ng-model="sortingBy">
+						<option ng-repeat="option in options" value="{{option.val}}">{{option.opt}}</option>
+					</select>
+					<button ng-click="sortReverse(sortingBy)">reverse</button>
+				</div>
+				<form name=price_Range">
+					<input type="number" name="min" ng-model="priceRange.min" placeholder="$">
+					to
+					<input type="number" name="max" ng-model="priceRange.max" placeholder="$"><br>
+					<button ng-click="range=null; clearAll()">Clear All</button>
+				</form>
+			</div><br>
+			<div class="productInfo" ng-if="status<400">
+				<table width="25%" border="0" align="center" bgcolor="#bfbfbf">
+					<tr bgcolor="#ffffff" ng-repeat="product in products | orderBy:sortingBy:reverse | filterRange:priceRange">
+						<td align="center">
+							<h2> {{ product.name }} </h2>
+							<h3> {{ product.defaultPriceInCents / 100 | currency }} </h3></b><br>
+			 				<img src="http:{{ product.mainImage.ref }}" width="60%"><br>
+			 				<small>Create at: {{ product.createdAt | date:"MM/dd/yyyy h:mma" }}</small><br>
+			 			</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>
